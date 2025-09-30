@@ -34,6 +34,13 @@ Le MVP inclut les capacités essentielles pour démontrer la valeur de l'approch
 
 - **Export structuré** : Les données validées sont exportées vers Google Sheets dans un format prêt pour intégration avec les systèmes d'assurance.
 
+## Stack 
+
+- API Realtime d'OpenAI avec WebSocket
+- LLM model like Anthropic or OpenAI
+- Framework : LangGraph(python), Botpress or Voiceflow
+- Google sheet (for prototype)
+
 ## Architecture du Système graph
 
 ```mermaid
