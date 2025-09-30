@@ -4,6 +4,17 @@
 
 A conversational voice AI system for automating insurance phone interviews using real-time voice interaction. Combines OpenAI's Realtime API with Claude Sonnet 4.5 to create natural, efficient interviews that collect and validate insurance information.
 
+## Documentation
+
+Complete project documentation is available in the PRD folder:
+
+- **[contexte.md](./PRD/contexte.md)** - Problem statement and solution overview
+- **[MVP.md](./PRD/MVP.md)** - Complete MVP architecture, flow diagrams, and success criteria
+- **[nodes.md](./PRD/nodes.md)** - Detailed catalog of all 14 LangGraph nodes
+- **[state_and_schemas.md](./PRD/state_and_schemas.md)** - Data schemas, state management, and Pydantic models
+- **[userflow.md](./PRD/userflow.md)** - User interaction flows and experience design
+- **[product_backlog.md](./PRD/product_backlog.md)** - Product backlog with EPICs and User Stories
+
 ## The Problem
 
 Insurance companies face challenges with traditional phone interviews: high operational costs, variable quality, limited availability, complex compliance, and scaling difficulties.
@@ -24,16 +35,6 @@ An AI assistant that automates pre-qualification interviews with:
 - Adaptive questioning - only asks for missing information
 - Structured export to Google Sheets
 - Complete audit trail with confidence scores
-
-## Documentation
-
-Complete project documentation is available in the following files:
-
-- **[contexte.md](./contexte.md)** - Problem statement and solution overview
-- **[MVP.md](./MVP.md)** - Complete MVP architecture, flow diagrams, node catalog, and technical implementation details
-- **[state_and_schemas.md](./state_and_schemas.md)** - Data schemas, state management, and Pydantic models
-- **[userflow.md](./userflow.md)** - User interaction flows and experience design
-- **[project_checklist.md](./project_checklist.md)** - Implementation checklist and development milestones
 
 ## Technology Stack
 
