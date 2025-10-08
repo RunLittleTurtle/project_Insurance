@@ -288,8 +288,10 @@ Mesure de succès:
 
 ---
 
-`★ Insight ─────────────────────────────────────`
-Le MVP intègre deux innovations architecturales critiques : (1) L'API Realtime élimine les transitions discontinues (upload/transcribe/TTS séparés), créant une conversation bidirectionnelle fluide, et (2) L'architecture de validation parallèle masque complètement TOUTES les latences LLM derrière des accusés de réception conversationnels - qu'il s'agisse de l'extraction initiale multi-champs (1.2s masquée par 3-4s de parole) ou des validations ciblées (0.8s masquée par 2-3s). Résultat : latence perçue < 200ms partout, zéro silence gênant du début à la fin. Cette combinaison transforme l'expérience de "formulaire vocal robotique avec pauses frustrantes" à "conversation naturelle et ultra-réactive" - exactement ce qui inspire confiance chez les utilisateurs dès la première interaction.
-`─────────────────────────────────────────────────`
+`Insight 
+Le MVP combine deux innovations clés : (1) L'API Realtime crée une conversation bidirectionnelle fluide sans transitions discontinues, et (2) l'architecture de validation parallèle masque toutes les latences LLM (1.2s pour l'extraction, 0.8s pour la validation) derrière des accusés de réception conversationnels naturels. Résultat : latence perçue < 200ms sans silence gênant, transformant l'expérience de "formulaire vocal robotique avec pauses" à "conversation naturelle ultra-réactive".`
 
-Ce MVP valide l'hypothèse centrale : une conversation vocale temps réel avec extraction intelligente ET réactivité optimisée (< 200ms) peut collecter des informations d'assurance plus efficacement qu'un formulaire traditionnel, tout en offrant une expérience utilisateur supérieure qui élimine les frustrations liées aux silences et latences perceptibles.
+`Ce MVP valide l'hypothèse centrale : une conversation vocale temps réel avec extraction intelligente ET réactivité optimisée peut collecter des informations d'assurance plus efficacement qu'un formulaire traditionnel, tout en éliminant les frustrations liées aux silences perceptibles.`
+
+
+

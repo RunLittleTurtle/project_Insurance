@@ -15,7 +15,7 @@ Marie Tremblay appelle pour ajouter un véhicule à son assurance auto.
 
 ## Insights Techniques
 
-`★ Insight 
+`Insight 
 La clé du MVP est l'architecture de latence masqué créer par l'ullusion et le process en parallèle. Sans les accusés de réception immédiats qui déclenchent le processing en parallèle, cette solution évite un effet de type "robot lent qui réfléchit trop longtemps". Avec cette architecture, elle devient "une conversation naturelle avec un assistant ultra-réactif". La différence entre lent et naturel MVP tient à ces 200ms.`
 
 ---
