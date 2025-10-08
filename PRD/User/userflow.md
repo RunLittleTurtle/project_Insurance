@@ -13,13 +13,10 @@ Marie Tremblay appelle pour ajouter un véhicule à son assurance auto.
 
 ---
 
-
-
----
 ## Insights Techniques
 
 `★ Insight 
-La clé du MVP n'est pas la technologie (Realtime API + Claude), mais l'architecture de latence masqué créer par l'ullusion et le process en parallèle. Sans les accusés de réception immédiats qui déclenchent le processing en parallèle, cette solution serait perçue comme "un robot lent qui réfléchit trop longtemps". Avec cette architecture, elle devient "une conversation naturelle avec un assistant ultra-réactif". La différence entre lent et naturel MVP tient à ces 200ms.`
+La clé du MVP est l'architecture de latence masqué créer par l'ullusion et le process en parallèle. Sans les accusés de réception immédiats qui déclenchent le processing en parallèle, cette solution évite un effet de type "robot lent qui réfléchit trop longtemps". Avec cette architecture, elle devient "une conversation naturelle avec un assistant ultra-réactif". La différence entre lent et naturel MVP tient à ces 200ms.`
 
 ---
 
@@ -96,11 +93,10 @@ TTS => TextToSpeach / STT => SpeachToText
 
 ### Code Couleur Technique
 
-🟢 **REALTIME (Vert #d4edda)** - Conversation fluide dans WebSocket OpenAI (STT + TTS intégrés)
-🔵 **LLM (Bleu #cce5ff)** - Processing Claude Sonnet 4.5 (extraction, validation sémantique - lourd, 800ms-1.5s)
-🟡 **DÉCISIONS (Jaune #fff3cd)** - Points de décision critiques (validation OK? champs manquants? retry?)
-🟠 **FAST (Orange #fff9e6)** - Optimisations latence < 200ms (quick checks, accusés immédiats)
-⚪ **SYSTEM (Gris clair #e2e6ea)** - Logic Python rapide (Pydantic, storage, export)
+🟢 **REALTIME ** - Conversation fluide dans WebSocket OpenAI (STT + TTS intégrés)
+🔵 **LLM parallèle ** - Processing Claude Sonnet 4.5 (extraction, validation sémantique - lourd, 800ms-1.5s)
+🟡 **DÉCISIONS ** - Points de décision critiques (validation OK? champs manquants? retry?)
+🟠 **FAST ** - Optimisations latence < 200ms (quick checks, accusés immédiats)
 💾 **STORAGE** - Export synchrone vers Google Sheets
 
 ```mermaid
@@ -238,7 +234,7 @@ sequenceDiagram
     Note over M,DB: 💾 Export Final
 
     rect rgb(226, 237, 243)
-        Note over SYS,DB: ⚪ SYSTEM - Export synchrone
+        Note over SYS,DB:  SYSTEM - Export synchrone
         activate DB
         SYS->>DB: Export données structurées
         Note over DB: session_id, timestamps,<br/>6 champs validés
@@ -330,31 +326,28 @@ Marie dit "1985" pour la date de naissance (incomplet).
 
 ---
 
-### 🎯 Point Clé #5 - Zones d'Exécution
+### 🎯 Point Clé #5 - Processus Parallèle
 
 **🟢 REALTIME (WebSocket OpenAI):**
+
 - Marie parle → STT intégré transcrit en temps réel
 - Système répond → TTS intégré synthétise immédiatement
 - Latence ultra-basse (< 200ms)
 - Connexion persistante maintenue pendant toute la conversation
 
-**🔵 LLM (Claude Sonnet 4.5 - Externe):**
+**🔵 LLM parallèle (Claude Sonnet 4.5 - Externe):**
+
 - Extraction intelligente multi-champs (1.2s)
 - Validation sémantique contextuelle (800ms)
 - Détection d'incohérences ou informations manquantes
 - **Critique:** S'exécute PENDANT que Realtime parle (invisible pour Marie)
 
-**⚪ SYSTEM (Python Logic):**
-- Validation Pydantic ultra-rapide (50ms) - formats, patterns, enums
-- Décisions de loop (10ms) - quels champs manquent?
-- Storage et state management (20ms)
-- **Critique:** Utilisé pour le "fast track" qui permet la réponse < 200ms
+- 
 
-**💾 STORAGE (Google Sheets):** ou puex petre exporter n'importe ou et même envoyé directement à l'utilisateur et être ajouté au CRM
+**💾 STORAGE (Google Sheets):** ou peut être exporté n'importe où et même envoyé directement à l'utilisateur et être ajouté au CRM
 
 - Export synchrone final 
 - Une seule fois à la toute fin
-- Backup local si échec réseau
 
 ---
 

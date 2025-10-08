@@ -8,12 +8,12 @@ A conversational voice AI system for automating insurance phone interviews using
 
 Complete project documentation is available in the PRD folder:
 
-- **[contexte.md](./PRD/contexte.md)** - Problem statement and solution overview
-- **[MVP_architecture.md](./PRD/MVP_architecture.md)** - Complete MVP architecture, flow diagrams, and success criteria
-- **[nodes.md](./PRD/nodes.md)** - Detailed catalog of all 14 LangGraph nodes
-- **[state_and_schemas.md](./PRD/state_and_schemas.md)** - Data schemas, state management, and Pydantic models
-- **[userflow.md](./PRD/userflow.md)** - User interaction flows and experience design
-- **[product_backlog.md](./PRD/product_backlog.md)** - Product backlog with EPICs and User Stories
+- **[contexte.md](./PRD/User/contexte.md)** - Problem statement and solution overview
+- **[MVP_architecture.md](./PRD/Dev/MVP_architecture.md)** - Complete MVP architecture, flow diagrams, and success criteria
+- **[nodes.md](./PRD/Dev/nodes.md)** - Detailed catalog of all 14 LangGraph nodes
+- **[state_and_schemas.md](./PRD/Dev/state_and_schemas.md)** - Data schemas, state management, and Pydantic models
+- **[userflow.md](./PRD/User/userflow.md)** - User interaction flows and experience design
+- **[product_backlog.md](./PRD/Dev/product_backlog.md)** - Product backlog with EPICs and User Stories
 
 ## The Problem
 

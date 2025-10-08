@@ -123,7 +123,8 @@ Pour la réponse exemple ci-dessus ("Bonjour, je m'appelle Marie Tremblay, mon n
 - **Premier contact = impression de réactivité**
 
 **Phase 2 - Extraction par Claude (pendant que système parle, 1200ms)** :
-Pendant que le système prononce son accusé, Claude analyse la transcription complète :
+Pendant que le système continue avec la réponse instantanée, Claude analyse la transcription complète :
+
 - Identifie "Marie" comme prénom potentiel (confiance 0.95)
 - Identifie "Tremblay" comme nom de famille potentiel (confiance 0.95)
 - Identifie "AB123456" comme numéro de police (confiance 0.98)
@@ -141,10 +142,11 @@ Chaque champ extrait par Claude est testé contre son validator Pydantic :
 Si un champ échoue la validation Pydantic (exemple: "AB12" trop court), il est rejeté silencieusement - sera redemandé explicitement plus tard. Mieux vaut manquer un champ que stocker une donnée invalide.
 
 **Phase 4 - Transition Naturelle vers Question Suivante** :
-Quand le système termine son accusé (~3.5s), l'extraction est complète depuis longtemps. Il enchaîne immédiatement : "Parfait, j'ai noté votre nom Marie Tremblay et votre numéro de police. Quelle est votre adresse actuelle?"
+Quand le système termine son accusé (~3.5s), l'extraction est déjà complète. Il enchaîne immédiatement : "Parfait, j'ai noté votre nom Marie Tremblay et votre numéro de police. Quelle est votre adresse actuelle?"
 
 **Gain de latence perçue** :
-- Approche sans optimisation : 1.5 secondes de silence complet (impression: "système lent")
+
+- Approche sans optimisation : 3 secondes de silence complet (impression: "système lent")
 - Approche optimisée MVP : 200ms avant feedback, extraction invisible (impression: "système réactif")
 
 Cette phase peut remplir et **valider** 40 à 70% des champs nécessaires en une seule question, réduisant dramatiquement la durée de l'entretien tout en garantissant la qualité structurelle des données ET une excellente première impression.
@@ -174,7 +176,7 @@ L'utilisateur répond : "123 rue Principale, Montréal, H3A 1B2, et vous pouvez 
 - **Crucial pour MVP** : Cette réponse rapide masque la latence de validation complexe
 
 **Phase 3 - Validation Approfondie en Arrière-Plan (pendant que le système parle)** :
-Pendant que le système prononce son accusé de réception (2-3 secondes de parole), deux processus parallèles s'exécutent :
+Pendant que le système continue avec la réponse instantanée (2-3 secondes de parole), deux processus parallèles s'exécutent :
 
 - **Validation Claude du champ principal** : Vérifie cohérence sémantique de l'adresse québécoise (800ms)
 - **Extraction et validation des bonus** :
@@ -183,7 +185,7 @@ Pendant que le système prononce son accusé de réception (2-3 secondes de paro
   - Résultat : Téléphone stocké comme **champ tentative** (needs_confirmation: true)
 
 **Phase 4 - Question Suivante Adaptée (validation déjà terminée)** :
-Quand le système termine son accusé de réception, la validation est complète. Il enchaîne immédiatement : "Pour confirmer, je peux vous joindre au 514-555-1234?"
+Quand le système continue avec la réponse instantanée, la validation est complète. Il enchaîne immédiatement : "Pour confirmer, je peux vous joindre au 514-555-1234?"
 
 L'utilisateur répond : "Oui, c'est ça"
 
