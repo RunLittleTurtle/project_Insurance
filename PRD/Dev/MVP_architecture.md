@@ -288,7 +288,7 @@ Mesure de succès:
 
 ---
 
-`Insight 
+`Insight - 
 Le MVP combine deux innovations clés : (1) L'API Realtime crée une conversation bidirectionnelle fluide sans transitions discontinues, et (2) l'architecture de validation parallèle masque toutes les latences LLM (1.2s pour l'extraction, 0.8s pour la validation) derrière des accusés de réception conversationnels naturels. Résultat : latence perçue < 200ms sans silence gênant, transformant l'expérience de "formulaire vocal robotique avec pauses" à "conversation naturelle ultra-réactive".`
 
 `Ce MVP valide l'hypothèse centrale : une conversation vocale temps réel avec extraction intelligente ET réactivité optimisée peut collecter des informations d'assurance plus efficacement qu'un formulaire traditionnel, tout en éliminant les frustrations liées aux silences perceptibles.`
