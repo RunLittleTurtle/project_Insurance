@@ -9,7 +9,7 @@ A conversational voice AI system for automating insurance phone interviews using
 Complete project documentation is available in the PRD folder:
 
 - **[contexte.md](./PRD/contexte.md)** - Problem statement and solution overview
-- **[MVP.md](./PRD/MVP.md)** - Complete MVP architecture, flow diagrams, and success criteria
+- **[MVP_architecture.md](./PRD/MVP_architecture.md)** - Complete MVP architecture, flow diagrams, and success criteria
 - **[nodes.md](./PRD/nodes.md)** - Detailed catalog of all 14 LangGraph nodes
 - **[state_and_schemas.md](./PRD/state_and_schemas.md)** - Data schemas, state management, and Pydantic models
 - **[userflow.md](./PRD/userflow.md)** - User interaction flows and experience design
@@ -33,7 +33,7 @@ An AI assistant that automates pre-qualification interviews with:
 - Open question approach reduces interview time by 40-70%
 - Bonus field extraction from user responses
 - Adaptive questioning - only asks for missing information
-- Structured export to Google Sheets
+- Parallelisation of processing
 - Complete audit trail with confidence scores
 
 ## Technology Stack
@@ -43,7 +43,3 @@ An AI assistant that automates pre-qualification interviews with:
 - Pydantic (structural validation)
 - LangGraph (conversation orchestration)
 - Google Sheets API (export)
-
----
-
-*For detailed architecture, implementation guides, and complete specifications, please refer to the documentation files above.*

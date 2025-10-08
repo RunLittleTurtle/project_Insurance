@@ -19,7 +19,7 @@ Marie Tremblay appelle pour ajouter un véhicule à son assurance auto.
 ## Insights Techniques
 
 `★ Insight 
-La clé du MVP n'est pas la technologie (Realtime API + Claude), mais **l'architecture de latence masquée**. Sans les accusés de réception immédiats qui déclenchent le processing en parallèle, cette solution serait perçue comme "un robot lent qui réfléchit trop longtemps". Avec cette architecture, elle devient "une conversation naturelle avec un assistant ultra-réactif". La différence entre lent et naturel MVP tient à ces 200ms.`
+La clé du MVP n'est pas la technologie (Realtime API + Claude), mais l'architecture de latence masqué créer par l'ullusion et le process en parallèle. Sans les accusés de réception immédiats qui déclenchent le processing en parallèle, cette solution serait perçue comme "un robot lent qui réfléchit trop longtemps". Avec cette architecture, elle devient "une conversation naturelle avec un assistant ultra-réactif". La différence entre lent et naturel MVP tient à ces 200ms.`
 
 ---
 
@@ -27,7 +27,7 @@ La clé du MVP n'est pas la technologie (Realtime API + Claude), mais **l'archit
 
 ## Userflow - Flowchart
 
-Voici le même scénario en flowchart avec texte visible et couleurs MVP:
+Voici le scénario en flowchart de Marie qui appel la compagnie d'assurance pour ajouter une police d'assurance de voiture :
 
 ```mermaid
 flowchart TD
@@ -81,9 +81,9 @@ flowchart TD
     class FAST1,FAST2,FAST3,FAST4 fastNode
 ```
 
-## Userflow Technique Alternatif - Sequence
+## Userflow de Marie mais avec processus technique - Sequence
 
-## Légende
+### Légende
 
 🗣️ **Marie parle** - Ce que l'utilisateur dit
 🤖 **Système répond** - Réponse vocale immédiate (TTS dans Realtime)
@@ -92,25 +92,15 @@ flowchart TD
 ⏱️ **Durée** - Temps réel de processing (masqué par la parole)
 ✅ **Validation OK** - Information acceptée
 ❌ **Retry** - Clarification nécessaire
+TTS => TextToSpeach / STT => SpeachToText
 
-TTS => TextToSpeach
-
-STT => SpeachToText
-
----
-
-## Zones Techniques (Code Couleur)
+### Code Couleur Technique
 
 🟢 **REALTIME (Vert #d4edda)** - Conversation fluide dans WebSocket OpenAI (STT + TTS intégrés)
-
 🔵 **LLM (Bleu #cce5ff)** - Processing Claude Sonnet 4.5 (extraction, validation sémantique - lourd, 800ms-1.5s)
-
 🟡 **DÉCISIONS (Jaune #fff3cd)** - Points de décision critiques (validation OK? champs manquants? retry?)
-
 🟠 **FAST (Orange #fff9e6)** - Optimisations latence < 200ms (quick checks, accusés immédiats)
-
 ⚪ **SYSTEM (Gris clair #e2e6ea)** - Logic Python rapide (Pydantic, storage, export)
-
 💾 **STORAGE** - Export synchrone vers Google Sheets
 
 ```mermaid
@@ -277,7 +267,8 @@ sequenceDiagram
 **Le problème sans optimisation:**
 Claude prend 800ms-1.5s pour analyser chaque réponse. Sans optimisation, Marie entendrait un silence gênant après chaque fois qu'elle parle.
 
-**La solution MVP:**
+**La solution MVP:** 
+
 - Quick Pydantic check (50ms) → filtre les erreurs évidentes
 - Accusé de réception immédiat (< 200ms) → "D'accord, j'ai bien noté..."
 - Processing Claude en parallèle pendant que le système parle (2-3s de TTS masquent les 800ms)
@@ -289,6 +280,7 @@ Claude prend 800ms-1.5s pour analyser chaque réponse. Sans optimisation, Marie 
 ### 🎯 Point Clé #2 - Extraction Multi-Champs
 
 **Question ouverte capture 67% des données:**
+
 - Marie dit: "Marie Tremblay, AB123456, j'aimerais ajouter ma voiture"
 - Claude extrait automatiquement: prénom, nom, numéro de police, raison (4 champs sur 6)
 - Pydantic valide chacun immédiatement
@@ -343,7 +335,7 @@ Marie dit "1985" pour la date de naissance (incomplet).
 **🟢 REALTIME (WebSocket OpenAI):**
 - Marie parle → STT intégré transcrit en temps réel
 - Système répond → TTS intégré synthétise immédiatement
-- Latence ultra-basse (< 100ms intrinsèque)
+- Latence ultra-basse (< 200ms)
 - Connexion persistante maintenue pendant toute la conversation
 
 **🔵 LLM (Claude Sonnet 4.5 - Externe):**
@@ -358,8 +350,9 @@ Marie dit "1985" pour la date de naissance (incomplet).
 - Storage et state management (20ms)
 - **Critique:** Utilisé pour le "fast track" qui permet la réponse < 200ms
 
-**💾 STORAGE (Google Sheets):**
-- Export synchrone final (100ms)
+**💾 STORAGE (Google Sheets):** ou puex petre exporter n'importe ou et même envoyé directement à l'utilisateur et être ajouté au CRM
+
+- Export synchrone final 
 - Une seule fois à la toute fin
 - Backup local si échec réseau
 

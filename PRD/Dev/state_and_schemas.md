@@ -2,7 +2,7 @@ Insurance Real Time Voice AI Form Completion - 29/09/2025
 
 # State and Schemas
 
-### (**BESOIN DE MODIFICATION DU SHÉMA LORSQUE LES CHAMPS SERONT RECONFIRMÉS)
+### (BESOIN DE MODIFICATION DU SHÉMA LORSQUE LES CHAMPS SERONT RECONFIRMÉS)
 
 ## Gestion du State
 

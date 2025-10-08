@@ -2,8 +2,6 @@ Insurance Real Time Voice AI Form Completion - 29/09/2025
 
 # MVP Product Backlog
 
----
-
 ## EPIC 1: Infrastructure Conversationnelle en Temps Réel
 
 Mettre en place les fondations techniques pour permettre une conversation vocale bidirectionnelle fluide entre le système et l'utilisateur.
@@ -21,7 +19,6 @@ Tâches:
 
 Critères d'acceptation:
 - La connexion WebSocket s'établit avec succès au démarrage
-- Les événements session.update sont envoyés et confirmés
 - Les événements audio sont reçus sans perte de paquets
 - La voix configurée est celle demandée (ex: alloy, echo)
 
@@ -32,12 +29,12 @@ En tant que développeur, je veux une structure de données centrale qui garde e
 Nodes implémentés: Structure partagée par tous les nodes (State global)
 
 Tâches:
-- Définir le State Pydantic avec les 6 champs de base
+- Définir le State Pydantic avec les champs de base
 - Implémenter la persistence en mémoire pour la session active
 - Créer les accesseurs et mutateurs pour mettre à jour le State
 
 Critères d'acceptation:
-- Le State contient: session_id, extracted_fields, conversation_history, retry_counts, current_field_targeted, validation_results
+- Exemple de State: user_id, session_id, extracted_fields, conversation_history, retry_counts, current_field_targeted, validation_results
 - Le State persiste pendant toute la durée de la session
 - Les modifications du State sont propagées entre les nodes
 - Le State peut être sérialisé en JSON pour debugging
@@ -59,6 +56,7 @@ Critères d'acceptation:
 - L'audio capturé est envoyé au WebSocket en temps réel
 - L'audio reçu est joué sans délai perceptible
 - Les indicateurs visuels reflètent l'état de la conversation
+- L'audio fonctionne avec Google chrome, Brave, Safari, Firefox, Edge
 
 ### US-1.4: Reconnexion automatique
 
@@ -86,7 +84,7 @@ Nodes implémentés: Création du graph principal + définition de tous les edge
 
 Tâches:
 - Créer le StateGraph avec le State Pydantic
-- Ajouter tous les 14 nodes au graph avec .add_node()
+- Ajouter tous les 14 nodes au graph
 - Définir les edges fixes: 1→2, 2→3, 3→7, 7→9, 9→12, 4→3, 3→6, 6→7 ou 6→5, 7→8, 8→11, 11→13 ou 11→5, 13→12, 12→14
 - Définir les conditional edges avec fonctions de routing: loop_start (12→4 ou 12→14), validation_check (11→13 ou 11→5), quick_check (6→7 ou 6→5)
 - Implémenter les fonctions de routing pour chaque décision (retour de clés string)
@@ -97,7 +95,7 @@ Critères d'acceptation:
 - Les conditional edges retournent les bonnes clés selon le State ("more"/"done", "valid"/"invalid", "pass"/"fail")
 - Le graph peut être compilé sans erreur
 - Une invocation complète exécute le bon flow selon les données (traçabilité des transitions dans les logs)
-- Le graph peut être visualisé avec .get_graph().draw_mermaid()
+- Le graph peut être visualisé dans Langsmith Studio
 
 ---
 
@@ -112,7 +110,7 @@ En tant que développeur, je veux des modèles Pydantic qui définissent la stru
 Nodes implémentés: Utilisé par 6. quick_pydantic_check, 9. extract_and_validate, 10. validate_with_context
 
 Tâches:
-- Créer FieldSchema pour les 6 champs (nom, police, adresse, téléphone, date, raison)
+- Créer FieldSchema pour les champs (nom, police, adresse, téléphone, date, raison)
 - Définir les validators Pydantic (formats, patterns regex, longueurs)
 - Créer ExtractedField avec états: validé, tentative, absent
 - Créer ValidationResult combinant résultats Pydantic et Claude
@@ -121,7 +119,7 @@ Critères d'acceptation:
 - Chaque champ a un validator qui rejette les formats invalides
 - Les numéros de police doivent commencer par 2 lettres + 6-10 chiffres
 - Les codes postaux québécois sont validés (format H3A 1B2)
-- Un champ peut être marqué comme tentative (needs_confirmation=True)
+- Un champ peut être marqué comme tentative (needs_confirmation)
 
 ### US-2.2: Intégration avec Claude pour extraction
 
@@ -157,7 +155,7 @@ Critères d'acceptation:
 - Une réponse comme "Je m'appelle Marie, police AB123456, pour ajouter mon auto" extrait 3-4 champs
 - Chaque champ extrait passe obligatoirement la validation Pydantic
 - Le taux d'extraction multi-champs atteint 40-70%
-- Les champs extraits sont marqués comme validés (validated=True)
+- Les champs extraits sont marqués comme validés (validated)
 
 ### US-2.4: Pipeline de validation rapide et approfondie
 
@@ -186,7 +184,7 @@ Nodes implémentés: 10. validate_with_context, 13. store_answer
 Tâches:
 - Détecter jusqu'à 2 champs bonus dans chaque réponse (Claude)
 - Valider les bonus avec Pydantic
-- Stocker les bonus comme tentative (needs_confirmation=True)
+- Stocker les bonus comme tentative (needs_confirmation)
 - Générer des questions de confirmation au lieu de questions complètes
 
 Critères d'acceptation:
@@ -292,14 +290,14 @@ Tâches:
 - Créer un format de log structuré (JSON)
 
 Critères d'acceptation:
-- Chaque transition de node est loggée avec timestamp
+- Chaque transition de node est loggée avec timestamp et Langsmith tracing
 - Les métriques incluent: latence perçue moyenne, taux d'extraction multi-champs, taux de retry
 - Les conversations complètes sont sauvegardées pour replay/debugging
 - Les logs sont faciles à parser et analyser
 
 ---
 
-## EPIC 5: Validation du MVP
+## EPIC 5: Validation du MVP Q&A
 
 Vérifier que le système fonctionne de bout en bout et respecte les critères de qualité définis.
 
