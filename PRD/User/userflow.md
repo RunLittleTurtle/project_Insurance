@@ -256,6 +256,310 @@ sequenceDiagram
 
 ---
 
+```
+sequenceDiagram
+
+    autonumber
+
+    participant M as 🗣️ Marie
+
+    participant RT as 🤖 Realtime<br/>(OpenAI)
+
+    participant SYS as ⚙️ System<br/>(Python)
+
+    participant LLM as 🧠 LLM<br/>(Claude)
+
+    participant DB as 💾 Sheets
+
+
+
+    Note over M,RT: 🟢 DÉBUT - Question Ouverte
+
+
+
+    RT->>M: 🤖 "Bonjour, votre nom et raison d'appel?"
+
+    M->>RT: 🗣️ "Marie Tremblay, AB123456, j'aimerais ajouter ma voiture"
+
+    RT->>SYS: transcription (STT intégré)
+
+
+
+    rect rgb(204, 163, 0)
+
+        Note over SYS,RT: ⚡ 200ms - Réponse immédiate (FAST)
+
+        SYS->>RT: Génère réponse texte
+
+    end
+
+
+
+    RT->>M: 🤖🔊 "D'accord, laissez-moi noter tout ça..." (TTS)
+
+
+
+    rect rgb(51, 102, 204)
+
+        Note over SYS,LLM: 🔵 LLM Processing pendant que système parle (3.5s)
+
+        activate LLM
+
+        SYS->>LLM: Extraire tous champs possibles
+
+        Note over LLM: ⏱️ 1.2s - Analyse complète
+
+        LLM-->>SYS: prénom="Marie"<br/>nom="Tremblay"<br/>police="AB123456"<br/>raison="ajout véhicule"
+
+        deactivate LLM
+
+        SYS->>SYS: Validation Pydantic (50ms)
+
+        Note over SYS: ✅ 4 champs validés<br/>❓ 2 champs manquants
+
+    end
+
+
+
+    Note over M,RT: 🟢 Question Ciblée #1 - Adresse (avec bonus)
+
+
+
+    RT->>M: 🤖 "Parfait Marie! Quelle est votre adresse actuelle?"
+
+    M->>RT: 🗣️ "123 rue Principale, Montréal, H3A 1B2,<br/>vous pouvez me joindre au 514-555-1234"
+
+    RT->>SYS: transcription
+
+
+
+    rect rgb(204, 163, 0)
+
+        Note over SYS: 🟠 FAST - Quick Pydantic (50ms)
+
+        SYS->>SYS: Quick Pydantic check
+
+        Note over SYS: ✅ Format adresse plausible
+
+        SYS->>RT: Génère réponse texte
+
+    end
+
+
+
+    RT->>M: 🤖🔊 "D'accord, j'ai bien noté..." (TTS)
+
+
+
+    rect rgb(51, 102, 204)
+
+        Note over SYS,LLM: 🔵 LLM Processing + Extraction bonus (2.5s parole)
+
+        activate LLM
+
+        SYS->>LLM: Valider adresse + chercher bonus
+
+        Note over LLM: ⏱️ 800ms - Validation contextuelle
+
+        LLM-->>SYS: adresse ✅ valide<br/>BONUS: téléphone="514-555-1234" (confiance 0.92)
+
+        deactivate LLM
+
+        SYS->>SYS: Pydantic téléphone (50ms)
+
+        Note over SYS: ✅ Format téléphone valide<br/>→ Stocké comme "tentative"
+
+    end
+
+
+
+    rect rgb(204, 153, 0)
+
+        Note over SYS: 🟡 DÉCISION - Loop logic
+
+        SYS->>SYS: Champs validés? Bonus à confirmer?
+
+    end
+
+
+
+    Note over M,RT: 🟢 Confirmation Bonus - Téléphone
+
+
+
+    RT->>M: 🤖 "Pour confirmer, je peux vous joindre au 514-555-1234?"
+
+    M->>RT: 🗣️ "Oui, c'est ça"
+
+    RT->>SYS: transcription
+
+
+
+    rect rgb(204, 163, 0)
+
+        Note over SYS: 🟠 FAST - Réponse immédiate
+
+        SYS->>SYS: Quick check (30ms)
+
+        SYS->>RT: Génère réponse texte
+
+    end
+
+
+
+    RT->>M: 🤖🔊 "Parfait..." (TTS)
+
+
+
+    rect rgb(51, 102, 204)
+
+        Note over SYS,LLM: 🔵 LLM - Validation confirmation
+
+        activate LLM
+
+        SYS->>LLM: Valider confirmation
+
+        Note over LLM: ⏱️ 300ms - Vérif "oui"
+
+        LLM-->>SYS: ✅ Confirmation positive
+
+        deactivate LLM
+
+        SYS->>SYS: Marquer téléphone validé=True
+
+    end
+
+
+
+    Note over M,RT: 🟢 Question Ciblée #2 - Date de naissance (avec retry)
+
+
+
+    RT->>M: 🤖 "Quelle est votre date de naissance?"
+
+    M->>RT: 🗣️ "1985"
+
+    RT->>SYS: transcription
+
+
+
+    rect rgb(204, 153, 0)
+
+        Note over SYS: 🟡 DÉCISION - Validation check
+
+        SYS->>SYS: Quick Pydantic (50ms)
+
+        Note over SYS: ❌ Échec: année seule insuffisante
+
+    end
+
+
+
+    rect rgb(40, 167, 69)
+
+        Note over RT: 🟢 RETRY conversationnel
+
+        SYS->>RT: Génère message pédagogique
+
+    end
+
+
+
+    RT->>M: 🤖🔊 "Je note 1985, mais j'ai besoin du jour et mois<br/>aussi, comme 15 janvier 1985" (TTS)
+
+    M->>RT: 🗣️ "Ah oui, 15 janvier 1985"
+
+    RT->>SYS: transcription
+
+
+
+    rect rgb(204, 163, 0)
+
+        Note over SYS: 🟠 FAST - Quick check
+
+        SYS->>SYS: Quick Pydantic (50ms)
+
+        Note over SYS: ✅ Format complet détecté
+
+        SYS->>RT: Génère réponse texte
+
+    end
+
+
+
+    RT->>M: 🤖🔊 "Parfait..." (TTS)
+
+
+
+    rect rgb(51, 102, 204)
+
+        Note over SYS,LLM: 🔵 LLM - Validation complète
+
+        activate LLM
+
+        SYS->>LLM: Validation complète
+
+        Note over LLM: ⏱️ 800ms - Vérif cohérence
+
+        LLM-->>SYS: ✅ Date valide (1985-01-15)
+
+        deactivate LLM
+
+    end
+
+
+
+    rect rgb(204, 153, 0)
+
+        Note over SYS: 🟡 DÉCISION - Loop terminé?
+
+        SYS->>SYS: ✅ Tous champs validés (6/6)
+
+    end
+
+
+
+    Note over M,DB: 💾 Export Final
+
+
+
+    rect rgb(52, 108, 138)
+
+        Note over SYS,DB:  SYSTEM - Export synchrone
+
+        activate DB
+
+        SYS->>DB: Export données structurées
+
+        Note over DB: session_id, timestamps,<br/>6 champs validés
+
+        DB-->>SYS: ✅ Row created (ID: 12847)
+
+        deactivate DB
+
+    end
+
+
+
+    rect rgb(40, 167, 69)
+
+        Note over RT: 🟢 REALTIME - Message final
+
+        SYS->>RT: Génère message de clôture
+
+        RT->>M: 🤖🔊 "Merci Marie, j'ai bien enregistré toutes vos informations.<br/>Un conseiller vous contactera dans les 24 heures. Bonne journée!" (TTS)
+
+    end
+
+
+
+    rect rgb(94, 53, 177)
+
+        Note over M,RT: 🏁 FIN - Session complète (SYSTEM)
+
+    end
+```
+
 ## Ce Qui Se Passe Réellement
 
 ### 🎯 Point Clé #1 - Réponse Immédiate Fast (< 200ms)
